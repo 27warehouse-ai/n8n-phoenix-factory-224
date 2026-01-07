@@ -1,5 +1,5 @@
-# 1. 繼承官方 v2.2.4 版本
-FROM n8nio/n8n:2.2.4
+# 1. 繼承官方 Runners v2.2.4 版本
+FROM n8nio/n8n-runners:2.2.4
 
 # 2. 切換成 root 權限安裝工具
 USER root
