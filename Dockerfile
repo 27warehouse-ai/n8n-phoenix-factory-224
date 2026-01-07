@@ -1,19 +1,18 @@
-# 🔐 鎖定版本：v2.2.4 + Alpine 系統
-# 這樣既不會被自動升級，又有 apk 可以用
-FROM n8nio/runners:2.2.4-alpine
+# ⚠️ 專用於 Runners 服務 (剪輯師)
+# 使用官方 Runner 映像檔作為地基 (通常是 Alpine 架構，支援 apk)
+FROM n8nio/runners:latest
 
-# 2. 切換 root 權限安裝軍火
+# 切換成 root 來安裝工具
 USER root
 
-# 3. 安裝 FFmpeg, AWS CLI, Python
+# 安裝 FFmpeg 與 AWS CLI
+# 因為是 runners 映像檔，這裡的 apk 指令通常是有效的
 RUN apk add --no-cache \
     ffmpeg \
     aws-cli \
     bash \
     curl \
-    jq \
-    python3 \
-    py3-pip
+    jq
 
-# 4. 切換回 node (安全規範)
+# 切換回 node 使用者 (符合 n8n 安全規範)
 USER node
