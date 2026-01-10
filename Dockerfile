@@ -1,15 +1,25 @@
-FROM n8nio/runners:latest
+FROM node:22-bookworm-slim
 
-USER root
+# 安裝系統依賴
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    awscli \
+    python3 \
+    python3-pip \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
 
-# 安裝 FFmpeg
-RUN apk update && \
-    apk add --no-cache ffmpeg && \
-    rm -rf /var/cache/apk/*
+# 安裝最新版 n8n
+RUN npm install -g n8n
 
-USER runner
-
-# 明確設置環境變數（清空所有禁用清單）
+# 設定環境變數（保險起見還是加上）
 ENV NODE_FUNCTION_ALLOW_BUILTIN=*
 ENV NODE_FUNCTION_ALLOW_EXTERNAL=*
-ENV N8N_RUNNERS_DISABLED_MODULES=
+ENV N8N_DEFAULT_BINARY_DATA_MODE=
+
+# 設定工作目錄
+WORKDIR /data
+
+# 啟動 n8n worker
+CMD ["n8n", "worker"]
+
