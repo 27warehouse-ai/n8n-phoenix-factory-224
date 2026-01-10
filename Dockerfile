@@ -6,12 +6,13 @@ USER root
 COPY n8n-task-runners.json /etc/n8n-task-runners.json
 RUN chmod 644 /etc/n8n-task-runners.json
 
-# 安裝 FFmpeg, Python3, AWS CLI 等工具
-RUN apk add --no-cache \
+# 更新套件列表並安裝 FFmpeg, Python3, AWS CLI 等工具
+RUN apt-get update && apt-get install -y \
     ffmpeg \
     python3 \
-    py3-pip \
-    aws-cli
+    python3-pip \
+    awscli \
+    && rm -rf /var/lib/apt/lists/*
 
 USER node
 
