@@ -1,17 +1,18 @@
-FROM n8nio/n8n:latest
+FROM node:22-bookworm-slim
 
-# 切換到 root 使用者以安裝套件
-USER root
-
-# 安裝 FFmpeg, AWS CLI, Python3, 以及效能優化工具
-RUN apk add --no-cache \
+# 安裝系統依賴
+RUN apt-get update && apt-get install -y \
     ffmpeg \
-    aws-cli \
+    awscli \
     python3 \
-    py3-pip \
+    python3-pip \
     curl \
     bash \
-    git
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# 安裝最新版 n8n
+RUN npm install -g n8n
 
 # 設定環境變數 - 針對高負載優化
 ENV NODE_FUNCTION_ALLOW_BUILTIN=*
@@ -29,8 +30,8 @@ ENV GENERIC_TIMEZONE=America/Vancouver
 # Node.js 記憶體優化（避免 OOM）
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
-# 切換回 node 使用者（安全性）
-USER node
+# 設定工作目錄
+WORKDIR /data
 
-# 使用預設的 n8n 啟動指令
-CMD ["n8n"]
+# 啟動 n8n worker
+CMD ["n8n", "worker"]
