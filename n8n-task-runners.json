@@ -1,0 +1,13 @@
+{
+  "task-runners": [
+    {
+      "runner-type": "javascript",
+      "working-directory": "/opt/runners/task-runner-javascript",
+      "health-check-server-port": "5681",
+      "env-overrides": {
+        "NODE_FUNCTION_ALLOW_BUILTIN": "*",
+        "NODE_FUNCTION_ALLOW_EXTERNAL": "*"
+      }
+    }
+  ]
+}
